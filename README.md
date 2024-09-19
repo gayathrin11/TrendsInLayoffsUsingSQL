@@ -1,2 +1,2 @@
-# Tech_Layoffs_SQL_Project
+# Trends in layoffs in the tech sector
 Trends in tech layoffs
