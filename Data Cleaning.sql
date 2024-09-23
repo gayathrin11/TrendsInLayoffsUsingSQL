@@ -28,8 +28,6 @@ SELECT * FROM CTE
 WHERE RN>1;
 
 -- We want to delete the entries with RN>1 that is, the one with duplicate entries.
--- IN MYSQL DELETE CTE DOESN'T WORK(cte not updatable msg is shown), IT WORKS ON SQL SERVER 
--- CTE is not updatable
 -- We perform the delete by creating another staging table with a new column, row_num and then deleting entries with row_num>1
 CREATE TABLE `layoffs_staging2` (
   `company` text,
@@ -88,30 +86,25 @@ FROM layoffs_staging2;
 UPDATE layoffs_staging2
 SET `date` = str_to_date(`date`, '%m/%d/%Y');
 
--- Altering - only do this with temp tables not the original dataset
--- converting data type to date
+-- Converting data type to date
 ALTER TABLE layoffs_staging2
 MODIFY COLUMN `date` DATE;
 
 
--- Step 3: working with null and blank values
--- some industry values have null or empty rows
 
+-- Step 3: Working with null and blank values
+
+-- some industry values have null or empty rows
 SELECT *
 from layoffs_staging2
 WHERE industry IS NULL OR industry = '';
--- it looks like airbnb is a travel, but this one just isn't populated.
--- I'm sure it's the same for the others. What we can do is
--- write a query that if there is another row with the same company name, it will update it to the non-null industry values
--- makes it easy so if there were thousands we wouldn't have to manually check them all
 
--- we should set the blanks to nulls since those are typically easier to work with
--- looking at the example of airbnb; industry name seems to be not populated
+-- Taking the example of airbnb; there are entries where industry name is not populated
 SELECT *
 from layoffs_staging2
 WHERE company ='Airbnb';
 
--- if there is another row with the same company name and empty industry name, update it to the non-null industry values correspondingly
+-- To fix this - if there is another row with the same company name and empty industry name, update it to the non-null industry values
 SELECT t1.industry, t2.industry
 from layoffs_staging2 t1
 JOIN layoffs_staging2 t2
@@ -126,7 +119,7 @@ SET t1.industry=t2.industry
 WHERE (t1.industry IS NULL OR t1.industry ='')
 AND t2.industry IS NOT NULL;
 
--- made blanks into null
+-- Set the blanks to null since those are normally easier to work with
 UPDATE layoffs_staging2
 SET industry = NULL
 WHERE industry = '';
@@ -137,6 +130,8 @@ ON t1.company = t2.company
 SET t1.industry=t2.industry
 WHERE t1.industry IS NULL 
 AND t2.industry IS NOT NULL;
+
+
 
 -- Step 4: Remove unnecessary columns
 SELECT * FROM layoffs_staging2
@@ -150,7 +145,7 @@ AND percentage_laid_off IS NULL;
 
 SELECT * FROM layoffs_staging2;
 
--- delete the column row_num -USE ALTER
+-- Delete the column row_num created for deleting the duplicate entries
 ALTER TABLE layoffs_staging2
 DROP COLUMN row_num;
 
