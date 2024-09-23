@@ -1,2 +1,4 @@
 # Analysis of trends in layoffs using SQL
-Trends in tech layoffs
+Description: Trends in tech layoffs
+Skills
+Tools - MySQL
