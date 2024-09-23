@@ -3,20 +3,21 @@
 
 SELECT * FROM layoffs_staging2;
 
--- checking maximum counts
+-- Checking maximum counts and percentage of layoffs
 SELECT MAX(total_laid_off), MAX(percentage_laid_off)
 FROM layoffs_staging2;
 
--- Companies were 100 percent employees were laid off
+-- Companies where 100 percent employees were laid off
 SELECT * FROM layoffs_staging2
 WHERE percentage_laid_off=1 
 ORDER BY total_laid_off DESC;
 
--- Companies that had high potential but still went under
+-- Companies that had high potential funding but still went under
 SELECT * FROM layoffs_staging2
 WHERE percentage_laid_off=1 
 ORDER BY funds_raised_millions DESC;
 
+-- USING GROUP BY
 -- Companies with highest layoffs
 SELECT company, SUM(total_laid_off)
 FROM layoffs_staging2
@@ -25,39 +26,37 @@ ORDER BY 2 DESC
 LIMIT 5;
 
 
-SELECT MIN(`date`), MAX(`date`)
-FROM layoffs_staging2; -- 3YEARS
-
--- finding the industry with highest layoffs
+-- Finding the industry with highest layoffs
 SELECT industry, SUM(total_laid_off)
 FROM layoffs_staging2
 GROUP BY industry 
 ORDER BY 2 DESC; -- consumer, retail, other
 
--- the layoffs based on country, date, year and stage
+-- Layoffs based on country
 SELECT country, SUM(total_laid_off)
 FROM layoffs_staging2
 GROUP BY country 
 ORDER BY 2 DESC; -- US, India, Netherlands
 
--- the layoffs based on date
+-- Layoffs based on date
 SELECT `date`, SUM(total_laid_off)
 FROM layoffs_staging2
 GROUP BY `date` 
 ORDER BY 1 DESC;
--- the layoffs grouped by year
+
+-- Layoffs grouped by year
 SELECT YEAR(`date`), SUM(total_laid_off)
 FROM layoffs_staging2
 GROUP BY YEAR(`date`) 
 ORDER BY 1 DESC; -- 2022 for this dataset
 
--- the layoffs based on company stage
+-- Layoffs based on company stage
 SELECT stage, SUM(total_laid_off)
 FROM layoffs_staging2
 GROUP BY stage 
 ORDER BY 2 DESC; -- post-ipo
 
--- looking at the progression of layoffs ; finding rolling sum
+-- To check the progression of layoffs - find rolling sum
 SELECT *
 FROM layoffs_staging2;
 
@@ -67,7 +66,7 @@ FROM layoffs_staging2
 group by month(`date`) ;
 
 -- Layoffs per Year-Month
--- Way 1
+-- Way 1 - Year-Month extraction
 SELECT date_format(`date`,"%Y-%m")  `MONTH`, sum(total_laid_off)
 FROM layoffs_staging2
 WHERE date_format(`date`,"%Y-%m") IS NOT NULL
