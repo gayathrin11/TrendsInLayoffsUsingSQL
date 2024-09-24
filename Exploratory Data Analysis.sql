@@ -30,13 +30,13 @@ LIMIT 5;
 SELECT industry, SUM(total_laid_off)
 FROM layoffs_staging2
 GROUP BY industry 
-ORDER BY 2 DESC; -- consumer, retail, other
+ORDER BY 2 DESC; 
 
 -- Layoffs based on country
 SELECT country, SUM(total_laid_off)
 FROM layoffs_staging2
 GROUP BY country 
-ORDER BY 2 DESC; -- US, India, Netherlands
+ORDER BY 2 DESC; 
 
 -- Layoffs based on date
 SELECT `date`, SUM(total_laid_off)
@@ -48,13 +48,13 @@ ORDER BY 1 DESC;
 SELECT YEAR(`date`), SUM(total_laid_off)
 FROM layoffs_staging2
 GROUP BY YEAR(`date`) 
-ORDER BY 1 DESC; -- 2022 for this dataset
+ORDER BY 1 DESC; 
 
 -- Layoffs based on company stage
 SELECT stage, SUM(total_laid_off)
 FROM layoffs_staging2
 GROUP BY stage 
-ORDER BY 2 DESC; -- post-ipo
+ORDER BY 2 DESC;
 
 -- To check the progression of layoffs - find rolling sum
 SELECT *
