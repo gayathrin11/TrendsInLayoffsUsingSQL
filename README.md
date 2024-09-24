@@ -1,4 +1,4 @@
-# Analysis of trends in layoffs using SQL
+# Analysis of trends in Layoffs using SQL
 **Goal:** The goal of this project is to analyze layoff data using SQL to surface insights on layoff trends and patterns within different industries for a dataset containing layoff data from 2020 to early 2023. The analysis aims to uncover insights like most affected sectors, time period with highest layoff rates and other key insights.
 
 ## Data Cleaning
